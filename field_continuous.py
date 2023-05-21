@@ -4,7 +4,7 @@ import sympy as sp
 
 
 class Field:
-    def __init__(self, ge, dist_func=None):
+    def __init__(self, ge: sp.GeometryEntity, dist_func=None):
         self.ge = ge
         self.dist_func = self.Sigmoid if not dist_func else dist_func
 

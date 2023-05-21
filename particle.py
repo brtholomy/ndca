@@ -65,13 +65,32 @@ def Jump(p: Particle, f: Field):
     return newp
 
 
-def PlotPositions(positions):
+def PlotPositions(positions: np.array):
     X = positions[:, [0]]
     Y = positions[:, [1]]
     I = range(len(positions))
 
     plt.scatter(X, Y, c=I)
     plt.colorbar(label="number of jumps")
+    plt.axis("equal")
+    PlotShow()
+
+
+def PlotField(f: Field, xymax: tuple, granularity: int):
+    xmax, ymax = xymax
+    coords = []
+    for x in np.linspace(-xmax, xmax, granularity):
+        for y in np.linspace(-ymax, ymax, granularity):
+            res = f.ResistanceAt((x,y))
+            coords.append((x, y, res))
+    coords = np.array(coords)
+
+    X = coords[:, [0]]
+    Y = coords[:, [1]]
+    Z = coords[:, [2]]
+
+    plt.scatter(X, Y, c=Z)
+    plt.colorbar(label="firing path resistance")
     plt.axis("equal")
     PlotShow()
 
@@ -88,13 +107,15 @@ if __name__ == "__main__":
     initial = sp.Point(4, 0)
     p = Particle(m, jspec, initial)
 
-    jumps = 100
-    positions = []
-    for i in range(jumps):
-        p = Jump(p, f)
-        # print(f"{p.inertia.radians = }")
-        # print(f"{p.position.evalf() = }")
-        positions.append(tuple(p.position.evalf()))
+    # jumps = 100
+    # positions = []
+    # for i in range(jumps):
+    #     p = Jump(p, f)
+    #     # print(f"{p.inertia.radians = }")
+    #     # print(f"{p.position.evalf() = }")
+    #     positions.append(tuple(p.position.evalf()))
 
-    positions = np.array(positions)
-    PlotPositions(positions)
+    # positions = np.array(positions)
+    # PlotPositions(positions)
+
+    PlotField(f, (5,5), 100)
